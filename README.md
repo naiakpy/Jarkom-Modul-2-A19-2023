@@ -20,9 +20,20 @@ Pembuatan konfigurasi jaringan
 ```
 auto eth0
 iface eth0 inet dhcp
-auto eth1 iface eth1 inet static address 192.178.1.1 netmask 255.255.255.0
-auto eth2 iface eth2 inet static address 192.178.2.1 netmask 255.255.255.0
-auto eth3 iface eth3 inet static address 192.178.3.1 netmask 255.255.255.0
+auto eth1
+iface eth1 inet static
+	address 192.178.1.1
+	netmask 255.255.255.0
+
+auto eth2
+iface eth2 inet static
+	address 192.178.2.1
+	netmask 255.255.255.0
+
+auto eth3
+iface eth3 inet static
+	address 192.178.3.1
+	netmask 255.255.255.0
 ```
 
 - DNS Master Yudhistira
@@ -30,9 +41,9 @@ auto eth3 iface eth3 inet static address 192.178.3.1 netmask 255.255.255.0
 ```sh
 auto eth0
 iface eth0 inet static
-   address 192.178.1.3
-   netmask 255.255.255.0
-   gateway 192.178.1.1
+	address 192.178.2.2
+	netmask 255.255.255.0
+	gateway 10.56.2.1
 ```
 
 - DNS Slave Werkudara
@@ -40,9 +51,9 @@ iface eth0 inet static
 ```
 auto eth0
 iface eth0 inet static
-	address 192.178.1.2
+	address 192.178.2.3
 	netmask 255.255.255.0
-	gateway 192.178.1.1
+	gateway 10.56.2.1
 ```
 
 - Nakula
@@ -52,7 +63,7 @@ auto eth0
 iface eth0 inet static
 	address 192.178.1.2
 	netmask 255.255.255.0
-	gateway 192.178.1.1
+	gateway 10.56.1.1
 ```
 
 - Sadewa
@@ -60,9 +71,9 @@ iface eth0 inet static
 ```
 auto eth0
 iface eth0 inet static
-	address 192.178.1.2
+	address 192.178.1.3
 	netmask 255.255.255.0
-	gateway 192.178.1.1
+	gateway 10.56.1.1
 ```
 
 - Abimanyu
@@ -70,9 +81,9 @@ iface eth0 inet static
 ```
 auto eth0
 iface eth0 inet static
-	address 192.178.1.2
+	address 192.178.3.3
 	netmask 255.255.255.0
-	gateway 192.178.1.1
+	gateway 10.56.3.1
 ```
 
 - Prabukusuma
@@ -80,9 +91,9 @@ iface eth0 inet static
 ```
 auto eth0
 iface eth0 inet static
-	address 192.178.1.2
+	address 192.178.3.2
 	netmask 255.255.255.0
-	gateway 192.178.1.1
+	gateway 10.56.3.1
 ```
 
 - Wisanggeni
@@ -90,19 +101,9 @@ iface eth0 inet static
 ```
 auto eth0
 iface eth0 inet static
-	address 192.178.1.2
+	address 192.178.3.4
 	netmask 255.255.255.0
-	gateway 192.178.1.1
-```
-
-- Arjuna
-
-```
-auto eth0
-iface eth0 inet static
-	address 192.178.3.5
-	netmask 255.255.255.0
-	gateway 192.178.3.1
+	gateway 10.56.3.1
 ```
 
 ## No 2
@@ -122,7 +123,7 @@ zone "arjuna.a19.com" {
 
 Buat direktori bernama `arjuna`, lakukan cp db.lokal, lalu setting. Ketik `service bind9 restart`
 
-Untuk cek apakah nakula client terhubung ke server arjuna, gunakan `echo nameserver 192.178.3.5 > /etc/resolv.conf` lalu ping
+Lakukan ping
 
 ## No 3
 Dengan cara yang sama seperti soal nomor 2, buatlah website utama dengan akses ke abimanyu.yyy.com dan alias www.abimanyu.yyy.com
@@ -139,7 +140,7 @@ zone "abimanyu.a19.com" {
 
 Buat direktori bernama `abimanyu`, lakukan cp db.lokal. Masuk kedalam file abimanyu.a19.com dan setting
 
-Untuk cek apakah nakula client terhubung ke server yudhistira, gunakan `echo nameserver 192.178.1.3 > /etc/resolv.conf` lalu ping
+Lakukan ping
 
 ## No 4
 Kemudian, karena terdapat beberapa web yang harus di-deploy, buatlah subdomain parikesit.abimanyu.yyy.com yang diatur DNS-nya di Yudhistira dan mengarah ke Abimanyu.
@@ -151,7 +152,7 @@ nano /etc/bind/jarkom/abimanyu.a19.com
 
 Setelah ditambahkan, lalu ketik `service bind9 restart`
 
-Untuk cek apakah Nakula client terhubung ke server yudhistira, gunakan `echo nameserver 192.178.1.3 > /etc/resolv.conf` lalu ping
+Lakukan ping
 
 ## No 5
 Buat juga reverse domain untuk domain utama. (Abimanyu saja yang direverse)
@@ -161,9 +162,9 @@ Edit `/etc/bind/named.conf.local` pada Yudhistira
 nano /etc/bind/named.conf.local
 ```
 
-Tambahkan konfigurasi dalam file tersebut dengan reverse 3 byte awal dari IP Abimanyu, lalu copykan file ptr ke dalam folder jarkom dan ubah namanya menjadi `1.178.192.in-addr.arpa`
+Tambahkan konfigurasi dalam file tersebut dengan reverse 3 byte awal dari IP Abimanyu, lalu copykan file ptr ke dalam folder jarkom dan ubah namanya menjadi `3.178.192.in-addr.arpa`
 ```
-cp /root/abimanyu.a19.ptr /etc/bind/jarkom/1.178.192.in-addr.arpa
+cp /root/abimanyu.a19.ptr /etc/bind/jarkom/3.178.192.in-addr.arpa
 ```
 
 Untuk mencek masuk ke nakula client, hubungkan ke server pusat
@@ -181,8 +182,8 @@ zone "arjuna.a19.com" {
 zone "abimanyu.a19.com" {
       type master;
       notify yes;
-      also-notify { 192.178.1.3; };
-      allow-transfer { 192.178.1.3; };
+      also-notify { 192.178.3.3; };
+      allow-transfer { 192.178.3.3; };
       file "/etc/bind/jarkom/abimanyu.a19.com";
 };
 
@@ -207,7 +208,7 @@ Kemudian, buka file `/etc/bind/named.conf.local` pada werkudara dan tambahkan pe
 ```
 zone "abimanyu.a19.com" {
   type slave;
-  masters {192.178.2.2; }; // Yudhistira
+  masters {192.178.2.2; }; 
   file "/var/lib/bind/abimanyu.a19.com";
 };
 ```
@@ -238,11 +239,11 @@ $TTL    604800
                        604800 )       ; Negative Cache TTL
 ;
 @               IN      NS      abimanyu.a19.com.
-@               IN      A       192.178.1.4   
+@               IN      A       192.178.3.3   
 www             IN      CNAME   abimanyu.a19.com.
-parikesit       IN      A       192.178.1.4  
+parikesit       IN      A       192.178.3.3
 www.parikesit   IN      CNAME   parikesit.abimanyu.a19.com.
-nsl             IN      A       192.178.2.3  
+nsl             IN      A       192.178.3.3
 baratayuda      IN      NS      nsl
 @               IN      AAAA    ::1
 ```
@@ -269,7 +270,7 @@ $TTL    604800
                        604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      baratayuda.abimanyu.a19.com.
-@       IN      A       192.178.1.4     ; IP Abimanyu
+@       IN      A       192.178.3.3
 www     IN      CNAME   baratayuda.abimanyu.a19.com.
 @       IN      AAAA    ::1
 ```
@@ -291,9 +292,9 @@ $TTL    604800
                        604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      baratayuda.abimanyu.a19.com.
-@       IN      A       192.178.1.4  
+@       IN      A       192.178.3.3 
 www     IN      CNAME   baratayuda.abimanyu.a19.com.
-rjp     IN      A       192.178.1.4   
+rjp     IN      A       192.178.3.3
 www.rjp IN      CNAME   rjp.baratayuda.abimanyu.a19.com.
 @       IN      AAAA    ::1
 ```
