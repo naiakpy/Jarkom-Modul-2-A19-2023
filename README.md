@@ -11,7 +11,7 @@ Yudhistira akan digunakan sebagai DNS Master, Werkudara sebagai DNS Slave, Arjun
 
 GNS Dibuat sebagai berikut
 
-//MASUKIN FOTO GNSNYA JAV//
+//FOTO GNS//
 
 Pembuatan konfigurasi jaringan
 
