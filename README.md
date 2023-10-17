@@ -122,4 +122,21 @@ zone "arjuna.a19.com" {
 
 Buat direktori bernama `arjuna`, lakukan cp db.lokal, lalu setting. Ketik `service bind9 restart`
 
-Untuk cek apakah nakula client terhubung ke server arjuna, gunakan `echo nameserver 192.171.3.5 > /etc/resolv.conf` lalu ping
+Untuk cek apakah nakula client terhubung ke server arjuna, gunakan `echo nameserver 192.178.3.5 > /etc/resolv.conf` lalu ping
+
+## No 3
+Dengan cara yang sama seperti soal nomor 2, buatlah website utama dengan akses ke abimanyu.yyy.com dan alias www.abimanyu.yyy.com
+
+Buka node Yudhistira, lalu buka `nano /etc/bind/named.conf.local`
+
+Masukkan
+```
+zone "abimanyu.a19.com" {
+	type master;
+	file "/etc/bind/abimanyu/abimanyu.a19.com";
+};
+```
+
+Buat direktori bernama `abimanyu`, lakukan cp db.lokal. Masuk kedalam file abimanyu.a19.com dan setting
+
+Untuk cek apakah Nakula client terhubung ke server Yudhistira, gunakan `echo nameserver 192.178.1.3 > /etc/resolv.conf` lalu ping
