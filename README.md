@@ -104,3 +104,22 @@ iface eth0 inet static
 	netmask 255.255.255.0
 	gateway 192.178.3.1
 ```
+
+## No 2
+Buatlah website utama pada node arjuna dengan akses ke arjuna.yyy.com dengan alias www.arjuna.yyy.com dengan yyy merupakan kode kelompok.
+
+Maka kami akan membuat website www.arjuna.a19.com
+
+Masuk ke node arjuna, lalu buka `nano /etc/bind/named.conf.local`
+
+Masukkan
+```
+zone "arjuna.a19.com" {
+	type master;
+	file "/etc/bind/arjuna/arjuna.a19.com";
+};
+```
+
+Buat direktori bernama `arjuna`, lakukan cp db.lokal, lalu setting. Ketik `service bind9 restart`
+
+Untuk cek apakah nakula client terhubung ke server arjuna, gunakan `echo nameserver 192.171.3.5 > /etc/resolv.conf` lalu ping
